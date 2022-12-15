@@ -1,0 +1,6 @@
+docheck/
+plex-claim*.yaml
+plex-deployment.yaml
+VERSION
+doimage.ps1
+docker-compose.yml
