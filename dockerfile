@@ -1,6 +1,5 @@
-# FROM --platform=$TARGETPLATFORM debian:buster-slim AS src
-FROM ubuntu:latest AS src
-
+FROM --platform=$TARGETPLATFORM ubuntu:latest AS src
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 ARG TARGETARCH
 ENV TARGETARCH=$TARGETARCH
 ENV DEBIAN_FRONTEND="noninteractive" \
@@ -19,7 +18,7 @@ COPY scripts/plex-url.sh .
 RUN mkdir /transcode
 RUN chmod 777 -R /transcode
 
-FROM drjp81/powershell as build
+FROM --platform=$BUILDPLATFORM drjp81/powershell as build
 ARG $TARGETARCH
 ENV TARGETARCH=$TARGETARCH
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
