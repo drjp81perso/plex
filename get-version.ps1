@@ -11,6 +11,7 @@ if ($finalver -ne $oldver)
 {
     write-host ("Old version was : " + $oldver + " and new version is: " + $finalver +". Will continue to process...")
     $env:Dockerjobs="True"
+    Remove-Item -LiteralPath $versionfile -Force -ErrorAction SilentlyContinue
 
 }
 else
@@ -30,7 +31,15 @@ if ($env:Dockerjobs -eq "True")
     [string]$vstring = $Matches[0]
     $finalver = $vstring.Replace("-","")
     Write-Host $finalver
-    Set-Content -path (Join-Path -Path $PSScriptRoot -ChildPath "VERSION") -Value $finalver -NoNewline -Force
+    try {
+        Remove-Item -LiteralPath $versionfile -Force -ErrorAction SilentlyContinue
+        Set-Content -path $versionfile -Value $finalver -NoNewline -Force    
+    }
+    catch {
+        Write-Error "Cannot update the VERSION file. Please check the permissions."
+        exit 1
+    }
+    
     
 }
 cd $PSScriptRoot
